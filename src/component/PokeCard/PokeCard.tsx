@@ -6,8 +6,8 @@ import PokemonDetails from "../PokemonDetails/PokemonDetails";
 export function PokeCard() : JSX.Element {
     const [pokemonDetails,setPokemonDetails] = useState<Array<any>>([]);
     const [inputSearch, setValueInputSearch] = useState<number>(0);
-    const [offset] = useState<number>(0);
-    const [limit] = useState<number>(24);
+    const [offset,setOffset] = useState<number>(0);
+    const [limit] = useState<number>(3);
 
     const getMorePokemon = useCallback(() => {
         PokemonDataService.getPokemon(offset,limit).
@@ -57,6 +57,16 @@ export function PokeCard() : JSX.Element {
         return (<PokemonDetails pokemon={pokemon} />);
     });
 
+    const  NextItem = () => {
+            setOffset(offset + 3);
+    }
+
+    const  PreviousItem = () => {
+        if(offset < 0 || offset > 1){
+            setOffset(offset - 3);
+        }
+    }
+
     return (
         <>
             <div className="container">
@@ -70,7 +80,14 @@ export function PokeCard() : JSX.Element {
                         {renderedPokemonList}
                     </div>
                 </div>
+                <div className="col-md-12 pb-2">
+                    <button type="button" className="btn btn-primary btn-sm " key="previous" id="more-button" onClick={NextItem}>Next Item</button>
+                </div>
+                <div className="col-md-12">
+                    <button type="button" className="btn btn-primary btn-sm " key="next" id="more-buttons" onClick={PreviousItem}>Previous Item</button>
+                </div>
             </div>
+
         </>
     );
 }
