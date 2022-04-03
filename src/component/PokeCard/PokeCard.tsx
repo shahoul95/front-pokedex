@@ -2,9 +2,10 @@ import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import './PokeCard.css';
 import PokemonDataService from "../../service/pokemon.service";
 import PokemonDetails from "../PokemonDetails/PokemonDetails";
+import PokemonDataType from "../../type/pokemon.type";
 
 export function PokeCard() : JSX.Element {
-    const [pokemonDetails,setPokemonDetails] = useState<Array<any>>([]);
+    const [pokemonDetails,setPokemonDetails] = useState<Array<PokemonDataType>>([]);
     const [inputSearch, setValueInputSearch] = useState<number>(0);
     const [offset,setOffset] = useState<number>(0);
     const [limit] = useState<number>(3);
