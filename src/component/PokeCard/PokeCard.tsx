@@ -5,7 +5,7 @@ import PokemonDetails from "../PokemonDetails/PokemonDetails";
 
 export function PokeCard() : JSX.Element {
     const [pokemonDetails,setPokemonDetails] = useState<Array<any>>([]);
-    const [inputSearch, setValueInputSearch] = useState<String>("");
+    const [inputSearch, setValueInputSearch] = useState<number>(0);
 
     const getMorePokemon = useCallback(() => {
         PokemonDataService.getPokemon(0,24).
@@ -39,13 +39,15 @@ export function PokeCard() : JSX.Element {
     }
 
     const handleChange = (event: ChangeEvent<{ value: string }>) => {
-        setValueInputSearch(event.target.value)
+        const id = parseInt(event.target.value);
+        setValueInputSearch(id)
     }
 
     const renderedPokemonList = pokemonDetails.filter((pokemon) => {
+        console.log(pokemon.id)
         if(!inputSearch){
             return pokemon;
-        } else if (pokemon.name.toLocaleLowerCase().includes(inputSearch.toLowerCase())){
+        } else if (pokemon.id === inputSearch){
             return pokemon;
         } else {
             return false;
