@@ -54,7 +54,7 @@ export function PokeCard() : JSX.Element {
             return false;
         }
     }).map(pokemon=>{
-        return (<PokemonDetails pokemon={pokemon} />);
+        return (<PokemonDetails key={pokemon.id} pokemon={pokemon}  />);
     });
 
     const  NextItem = () => {
