@@ -72,7 +72,8 @@ export function PokeCard() : JSX.Element {
             <div className="container">
                 <div className="row d-flex justify-content-center pb-2">
                     <div>
-                        <input type="text" className="form-control" onChange={handleChange}/>
+                        <label form="idPokemon"> Numéro ID :</label>
+                        <input type="text" name="idPokemon" className="form-control" onChange={handleChange}/>
                     </div>
                 </div>
                 <div className="row">
