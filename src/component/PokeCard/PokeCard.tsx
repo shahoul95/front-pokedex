@@ -1,16 +1,13 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import './PokeCard.css';
 import PokemonDataService from "../../service/pokemon.service";
 import PokemonDetails from "../PokemonDetails/PokemonDetails";
+
 export function PokeCard() : JSX.Element {
     const [pokemonDetails,setPokemonDetails] = useState<Array<any>>([]);
     const [inputSearch, setValueInputSearch] = useState<String>("");
 
-    useEffect(() => {
-        getMorePokemon();
-    },[]);
-
-    const getMorePokemon = () => {
+    const getMorePokemon = useCallback(() => {
         PokemonDataService.getPokemon(0,24).
         then(function (res:any) {
             if(res){
@@ -20,7 +17,11 @@ export function PokeCard() : JSX.Element {
             .catch(function (error) {
                 throw error;
             });
-    }
+    },[])
+
+    useEffect(() => {
+        getMorePokemon();
+    },[getMorePokemon]);
 
     const getPokemonByUrl = (url:Array<any>) => {
         const pokemons = url.map(pokemon=>{
@@ -44,8 +45,10 @@ export function PokeCard() : JSX.Element {
     const renderedPokemonList = pokemonDetails.filter((pokemon) => {
         if(!inputSearch){
             return pokemon;
-        } else if(pokemon.name.toLocaleLowerCase().includes(inputSearch.toLowerCase())){
+        } else if (pokemon.name.toLocaleLowerCase().includes(inputSearch.toLowerCase())){
             return pokemon;
+        } else {
+            return false;
         }
     }).map(pokemon=>{
         return (<PokemonDetails pokemon={pokemon} />);
