@@ -6,9 +6,11 @@ import PokemonDetails from "../PokemonDetails/PokemonDetails";
 export function PokeCard() : JSX.Element {
     const [pokemonDetails,setPokemonDetails] = useState<Array<any>>([]);
     const [inputSearch, setValueInputSearch] = useState<number>(0);
+    const [offset] = useState<number>(0);
+    const [limit] = useState<number>(24);
 
     const getMorePokemon = useCallback(() => {
-        PokemonDataService.getPokemon(0,24).
+        PokemonDataService.getPokemon(offset,limit).
         then(function (res:any) {
             if(res){
                 getPokemonByUrl(res.data.results);
@@ -17,7 +19,7 @@ export function PokeCard() : JSX.Element {
             .catch(function (error) {
                 throw error;
             });
-    },[])
+    },[offset,limit])
 
     useEffect(() => {
         getMorePokemon();
@@ -44,7 +46,6 @@ export function PokeCard() : JSX.Element {
     }
 
     const renderedPokemonList = pokemonDetails.filter((pokemon) => {
-        console.log(pokemon.id)
         if(!inputSearch){
             return pokemon;
         } else if (pokemon.id === inputSearch){
@@ -57,18 +58,20 @@ export function PokeCard() : JSX.Element {
     });
 
     return (
-        <div className="container">
-            <div className="row d-flex justify-content-center pb-2">
-                <div>
-                    <input type="text" className="form-control" onChange={handleChange}/>
+        <>
+            <div className="container">
+                <div className="row d-flex justify-content-center pb-2">
+                    <div>
+                        <input type="text" className="form-control" onChange={handleChange}/>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="card-columns">
+                        {renderedPokemonList}
+                    </div>
                 </div>
             </div>
-            <div className="row">
-                <div className="card-columns">
-                    {renderedPokemonList}
-                </div>
-            </div>
-        </div>
+        </>
     );
 }
 
