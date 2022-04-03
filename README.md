@@ -44,3 +44,10 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Amélioration de l'application
+
+- Ajout des redirections au click des carte pokémon , pour voir leur caractéristique détailler.
+- Améliorer la partie visuelle si besoin.
+- Filtrer les carte pokémon par leur nom.
+- Mettre en place un filtrage pour voir chaque pokémon leur génération.
