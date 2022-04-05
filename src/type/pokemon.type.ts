@@ -3,6 +3,6 @@ export default interface PokemonDataType {
     name?: string | null,
     height?: number | null,
     weight?: number | null,
-    sprites?: HTMLImageElement,
+    sprites?: any,
     url?: string | null
 }

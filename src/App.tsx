@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {PokeCard} from './component/PokeCard/PokeCard';
+import PokeCard from './component/PokeCard/PokeCard';
 
 const App: React.FC = () => {
   return (

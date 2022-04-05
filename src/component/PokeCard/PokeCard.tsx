@@ -1,18 +1,33 @@
-import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
+import React, {ChangeEvent, FC, useCallback, useEffect, useState} from 'react';
 import './PokeCard.css';
 import PokemonDataService from "../../service/pokemon.service";
 import PokemonDetails from "../PokemonDetails/PokemonDetails";
 import PokemonDataType from "../../type/pokemon.type";
+import PokeCardType from "../../type/pokeCard.type"
 
-export function PokeCard() : JSX.Element {
+const  PokeCard: FC<PokeCardType> = () => {
     const [pokemonDetails,setPokemonDetails] = useState<Array<PokemonDataType>>([]);
     const [inputSearch, setValueInputSearch] = useState<number>(0);
     const [offset,setOffset] = useState<number>(0);
     const [limit] = useState<number>(3);
 
+    const getPokemonByUrl = (url:Array<{url:string}>) => {
+        const pokemons = url.map(pokemon=>{
+            return PokemonDataService.getPokemonByUrl(pokemon.url).then(function (res: any) {
+                if (res) {
+                    return res.data
+                }
+            }).catch(function (error) {
+                throw error;
+            });
+        })
+
+        Promise.all(pokemons).then(pokemon=>{setPokemonDetails(pokemon)});
+    }
+
     const getMorePokemon = useCallback(() => {
-        PokemonDataService.getPokemon(offset,limit).
-        then(function (res:any) {
+        PokemonDataService.getPokemon(offset,limit)
+        .then(function (res:any) {
             if(res){
                 getPokemonByUrl(res.data.results);
             }
@@ -26,27 +41,12 @@ export function PokeCard() : JSX.Element {
         getMorePokemon();
     },[getMorePokemon]);
 
-    const getPokemonByUrl = (url:Array<any>) => {
-        const pokemons = url.map(pokemon=>{
-            const pokemonDetails = PokemonDataService.getPokemonByUrl(pokemon.url).then(function (res:any) {
-                if(res){
-                    return res.data
-                }
-            }).catch(function (error) {
-                throw error;
-            });
-            return pokemonDetails;
-        })
-
-        Promise.all(pokemons).then(pokemon=>{setPokemonDetails(pokemon)});
-    }
-
     const handleChange = (event: ChangeEvent<{ value: string }>) => {
         const id = parseInt(event.target.value);
         setValueInputSearch(id)
     }
 
-    const renderedPokemonList = pokemonDetails.filter((pokemon) => {
+    const renderedPokemonList = pokemonDetails.filter((pokemon : PokemonDataType) => {
         if(!inputSearch){
             return pokemon;
         } else if (pokemon.id === inputSearch){
@@ -55,11 +55,13 @@ export function PokeCard() : JSX.Element {
             return false;
         }
     }).map(pokemon=>{
-        return (<PokemonDetails key={pokemon.id} pokemon={pokemon}  />);
+        return (<PokemonDetails key={pokemon.id} id={pokemon.id} name={pokemon.name}
+                                height={pokemon.height} weight={pokemon.weight}
+                                sprites={pokemon.sprites}  />);
     });
 
     const  NextItem = () => {
-            setOffset(offset + 3);
+        setOffset(offset + 3);
     }
 
     const  PreviousItem = () => {
@@ -93,4 +95,5 @@ export function PokeCard() : JSX.Element {
         </>
     );
 }
+export default PokeCard;
 
