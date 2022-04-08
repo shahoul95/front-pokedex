@@ -1,8 +1,8 @@
 export default interface PokemonDataType {
-    id?: number | null,
-    name?: string | null,
-    height?: number | null,
-    weight?: number | null,
+    id?: number,
+    name?: string,
+    height?: number,
+    weight?: number,
     sprites?: any,
-    url?: string | null
+    url?: string
 }
