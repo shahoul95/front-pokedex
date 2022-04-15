@@ -4,6 +4,7 @@ import PokemonDataService from "../../service/pokemon.service";
 import PokemonDetails from "../PokemonDetails/PokemonDetails";
 import PokemonDataType from "../../type/pokemon.type";
 import PokeCardType from "../../type/pokeCard.type"
+import {AxiosResponse} from "axios";
 
 const  PokeCard: FC<PokeCardType> = () => {
     const [pokemonDetails,setPokemonDetails] = useState<Array<PokemonDataType>>([]);
@@ -11,18 +12,11 @@ const  PokeCard: FC<PokeCardType> = () => {
     const [offset,setOffset] = useState<number>(0);
     const [limit] = useState<number>(3);
 
-    const getPokemonByUrl = (url:Array<{url:string}>) :  Promise<void | PokemonDataType[]>=> {
+    const getPokemonByUrl = async (url:Array<{url:string}>) :  Promise<void | PokemonDataType[]>=> {
         const pokemonUrls = url.map(pokemon=>{
-            return PokemonDataService.getPokemonByUrl(pokemon.url).then(function (res: any) {
-                if (res) {
-                    return res.data
-                }
-            }).catch(function (error) {
-                throw error;
-            });
+            return PokemonDataService.getPokemonByUrl(pokemon.url).then((res : AxiosResponse<PokemonDataType>) => {return res.data})
         })
-
-        return Promise.all<PokemonDataType>(pokemonUrls).then(pokemon=>{setPokemonDetails(pokemon)});
+        return await Promise.all<PokemonDataType>(pokemonUrls).then(pokemon=>{setPokemonDetails(pokemon)});
     }
 
     const getMorePokemon = useCallback(() => {
