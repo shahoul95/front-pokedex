@@ -12,7 +12,7 @@ const  PokeCard: FC<PokeCardType> = () => {
     const [limit] = useState<number>(3);
 
     const getPokemonByUrl = (url:Array<{url:string}>) :  Promise<void | PokemonDataType[]>=> {
-        const pokemons = url.map(pokemon=>{
+        const pokemonUrls = url.map(pokemon=>{
             return PokemonDataService.getPokemonByUrl(pokemon.url).then(function (res: any) {
                 if (res) {
                     return res.data
@@ -22,7 +22,7 @@ const  PokeCard: FC<PokeCardType> = () => {
             });
         })
 
-        return Promise.all<PokemonDataType>(pokemons).then(pokemon=>{setPokemonDetails(pokemon)});
+        return Promise.all<PokemonDataType>(pokemonUrls).then(pokemon=>{setPokemonDetails(pokemon)});
     }
 
     const getMorePokemon = useCallback(() => {
